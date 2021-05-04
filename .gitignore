@@ -1,0 +1,7 @@
+.vscode
+.vscode/**
+labelserver/uploads/**
+labelserver/__pycache__
+
+reactlabeltool/node_modules
+
