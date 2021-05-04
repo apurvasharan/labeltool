@@ -1,28 +1,34 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import config from './config';
+import './ImageRepository.css';
 
-export default function ImageRepository() {
-    function showRepository(imgrefs) {
-        return (
-            <div>
-                {
-                    imgrefs.map((imgref, i) => {
-                        return <img src={imgref} key="{i}" alt="thumbnail"/>
-                    })
-                }
-            </div>  
-        );
+export default function ImageRepository(props) {
+    const [imgrefs, setImgrefs] = useState([]);
+
+    function handleClick() {
+        // props.onChange();
     }
-    
-    axios
-        .get(
-            "http://localhost:4000/get-thumbnails"
-        )
-        .then((resp) => {
-            return showRepository(resp.imgrefs);  
-        });
+
+    useEffect(() => {
+        axios
+            .get(
+                config.server_url + "/get-thumbnails"
+            )
+            .then((resp) => {
+                console.log(resp.data.imgrefs);
+                setImgrefs(resp.data.imgrefs);
+            });
+    }, []);
 
     return (
-        <div>Repository of all images</div>
+        <div>
+            {
+                imgrefs.map((imgref) => {
+                    let url = config.server_url + "/" + imgref
+                    return <img src={url} key={imgref} alt={imgref} onClick={handleClick}/>
+                })
+            }
+        </div>
     );
 }
