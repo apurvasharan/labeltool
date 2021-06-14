@@ -1,26 +1,27 @@
 import React, { useState } from 'react';
 import FileUpload from './FileUpload';
 import ImageRepository from './ImageRepository';
+import Annotator from './Annotator';
 
 export default function MainPage() {
-    const [showrepo, setShowRepo] = useState(true);
+    const [repoShown, setRepoShown] = useState(true);
+    const annotator = <Annotator toggleDisplay={toggleDisplay}/>;
 
-    function showAnnotator(){
-        setShowRepo(false);
+    function toggleDisplay() {
+        console.log("Toggling display");
+        setRepoShown(!repoShown);
     }
 
-    if (showrepo == true) {
+    if (repoShown == true) {
         return (
             <div>
                 <FileUpload/>
-                <ImageRepository onChange={showAnnotator}/>
+                <ImageRepository toggleDisplay={toggleDisplay} annotator={annotator}/>
             </div>
         );
     } else {
         return (
-            <div>
-                Show annotator
-            </div>
+            <div> { annotator } </div>
         )
     }
 }

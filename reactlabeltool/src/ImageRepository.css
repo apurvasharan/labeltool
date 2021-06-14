@@ -1,3 +1,18 @@
 img {
     margin: 1px;
 }
+
+.imgrepo {
+    width: 100%;
+}
+
+.imgdisplay {
+    float:left;
+    padding: 0px 0px 5px;
+}
+
+.imgname {
+    margin-top: 1px;
+    display: block;
+    font-size: xx-small;
+}

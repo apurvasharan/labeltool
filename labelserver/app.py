@@ -54,12 +54,22 @@ def upload_images():
         thumbpath = os.path.join(UPLOAD_THUMB_FOLDER, filename)
         img = cv2.imread(filepath)
         h, w, _ = img.shape
-        nw = 160
-        nh = h * 160 // w
+        nw = 240
+        nh = h * nw // w 
         thumb = cv2.resize(img, (nw, nh))
         cv2.imwrite(thumbpath, thumb)
 
-        labelfiles.insert({'userfilename': fileobj.filename, 'unique_filename': filename, 'image_path': filepath, 'thumb_path': thumbpath})
+        labelfiles.update(
+            {'userfilename': fileobj.filename},
+            {
+                'userfilename': fileobj.filename, 
+                'unique_filename': filename,
+                'image_path': filepath, 
+                'thumb_path': thumbpath, 
+                'annotated': False
+            },
+            upsert=True
+        )
     return jsonify({'status': 'OK', 'msg': 'Upload request received'})
 
 
@@ -69,7 +79,7 @@ def get_thumbnails():
     cursor = labelfiles.find({})
     for rec in cursor:
         print(rec)
-        imgrefs.append(f"/thumbnail/{rec['unique_filename']}")
+        imgrefs.append({"img": f"/thumbnail/{rec['unique_filename']}", "name": rec['userfilename']})
     return jsonify({'imgrefs': imgrefs})
 
 
